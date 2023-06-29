@@ -67,7 +67,7 @@ const controller = {
       try{
          let dbResponse = await customer.registerCustomer(name, cpf, email, password, address_id)
       }catch(err){
-         res.status(500).json({message: `Server error. Could not complete this operation:`})
+         return res.status(500).json({message: `Server error. Could not complete this operation`})
       }
       
       res.status(200).json({message: "User registered."})
