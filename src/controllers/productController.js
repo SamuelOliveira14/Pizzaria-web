@@ -1,3 +1,4 @@
+const product = require('../models/productModel')
 const products = require('../models/productModel')
 
 const controller = {
@@ -10,19 +11,30 @@ const controller = {
         }
     },
 
-    getPrice: async (req, res, next) => {
+    getPriceAndType: async (req, res, next) => {
 
-        const {product_id} = req.body //id ou product_id?
+        const {product_id} = req.body
 
         try{
-            var response = await products.getPrice(product_id)
+            var response = await products.getById(product_id)
+            req.product_price = response[0].price
+            req.product_type = response[0].type
         }catch(err){
             return res.status(500).json({error: "Products - Internal error"})
         }
 
-        req.product_price = response[0].price
-        next()
+        req.multiplier = 1
 
+        try{
+            if (req.product_type == 1) { //Se for pizza
+                const {size} = req.body
+                response = await products.getSizeMultiplier(size)
+                req.multiplier = response[0].multiplier
+            }
+        }catch(err){
+            return res.status(500).json({error: "Products - Internal error"})
+        }
+        next()
     }
 }
 

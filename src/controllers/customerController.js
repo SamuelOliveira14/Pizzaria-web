@@ -14,22 +14,22 @@ const controller = {
    findById: async (req, res) => {
       try {
          var user = await customer.findById(req.params.id)
+         user = user[0]
       } catch (err) {
          res.status(500).json({error: "Server error"})
       }
 
-      user = user[0]
       res.status.json(user)
    },
 
    findByEmail: async (req, res) => {
       try{
          var user = await customer.findByEmail(req.params.email)
+         user = user[0]
       }catch (err) {
          res.status(500).json({error: "Server error"})
       }
       
-      user = user[0]
       if(!user){
          return res.status(404).json({error: 'Wrong credentials.'})
       } 
@@ -40,11 +40,11 @@ const controller = {
       const {email, password} = req.body
       try {
          var user = await customer.findByEmail(email)
+         user = user[0]
       }catch (err) {
          res.status(500).json({error: "Server error"})
       }
-
-      user = user[0]
+      
       if(!user){
          res.clearCookie('token')
          return res.status(404).json({error: 'User Not Found'})

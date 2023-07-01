@@ -3,9 +3,9 @@ const connection = require('./connection')
 const shoppingCart = {
     getAllFromUserId: async (customer_id) => {
 
-        const response = await connection.query(`SELECT product_id, quantity, total_price
-        FROM public."Shopping_Cart" 
-        where customer_id = $1`, [customer_id]) // Join with Products table
+        const response = await connection.query(`SELECT product_id, quantity, total_price, description, image_link 
+        FROM public."Shopping_Cart" join "Products" ON product_id = id 
+        where customer_id = $1;`, [customer_id])
 
         return response.rows
     },

@@ -6,6 +6,7 @@ const neighborhood = require('./controllers/neighborhoodController')
 const address = require('./controllers/addressController')
 const products = require('./controllers/productController')
 const shoppingCart = require('./controllers/shoppingCartController')
+const order = require('./controllers/orderController')
 const router = express.Router()
 
 
@@ -19,9 +20,12 @@ router.get('/neighborhoods',neighborhood.getAll)
 router.get('/private', auth, (req, res) =>{ res.json({message: 'You entered in a private section', id: req.userId})})
 router.get('/products', products.getAll)
 router.get('/getShoppingCart', auth, shoppingCart.getAll)
+router.get('/orders', auth, order.getCustomerOrders)
+router.get('/finishOrder', auth, shoppingCart.finishOrder, order.createOrder, shoppingCart.clearCart)
 
 router.post('/login', customer.checkPassword, login)
 router.post('/register', neighborhood.findByName, address.registerAddress, customer.registerCustomer)
-router.post('/addToCart', auth, products.getPrice, shoppingCart.addToCart)
+router.post('/addToCart', auth, products.getPriceAndType, shoppingCart.addToCart)
+
 
 module.exports = router

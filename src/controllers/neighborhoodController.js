@@ -21,11 +21,11 @@ const neighborhoodController = {
       const {neighborhood} = req.body
       try{
          var dbResponse = await neighborhoodModel.findByName(neighborhood)
+         var {id} = dbResponse[0]
       }catch(err){
          return res.status(500).json({error: 'Could not complete this request'})
       }
 
-      const {id} = dbResponse[0]
       req.neighborhood_id = id
       next()
    },

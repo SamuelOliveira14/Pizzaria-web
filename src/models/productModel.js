@@ -22,8 +22,18 @@ const product = {
       }
    },
 
-   getPrice: async (id) => {
-      const response = await connection.query(`select price from "Products" where id = $1`, [id])
+   getPriceAndType: async (id) => {
+      const response = await connection.query(`SELECT price, type FROM "Products" WHERE id = $1`, [id])
+      return response.rows
+   },
+
+   getSizeMultiplier: async (description) => {
+      const response = await connection.query(`SELECT multiplier FROM public."Pizza_Sizes" WHERE description = $1;`, [description])
+      return response.rows
+   },
+
+   getById: async (id) => {
+      const response = await connection.query(`SELECT * FROM "Products" WHERE id = $1`, [id])
       return response.rows
    }
 }
