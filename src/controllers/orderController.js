@@ -7,16 +7,14 @@ const controller = {
         let order_price = 0
         for(item of req.shoppingCartItems){
             order_price = order_price + parseFloat(item.total_price)
-            console.log(parseFloat(item.total_price))
         }
         order_price = parseFloat(order_price)
         try{
             var response = await order.createOrder(customer_id, parseFloat(order_price), new Date())
+            req.orderId = response[0].id
         }catch(err){
             return res.status(500).json({error: `order error: ${err}`})
         }
-
-        req.orderId = response[0].id
 
         for(item of req.shoppingCartItems){
             try{

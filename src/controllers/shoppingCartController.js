@@ -61,7 +61,12 @@ const controller = {
         const customer_id = req.userId
 
         try{
-            req.shoppingCartItems = await shoppingCart.getAllFromUserId(customer_id)
+            const response = await shoppingCart.getAllFromUserId(customer_id)
+            if(response.length == 0){
+                return res.status(406).json({Warning: "Could not complete this request: Your Shopping Cart is empty"})
+            }
+
+            req.shoppingCartItems = response
         }catch(err){
             return res.status(500).json({error: "Shopping Cart - Internal error"})
         }

@@ -24,12 +24,23 @@ const controller = {
         }
 
         req.multiplier = 1
+        req.product_additionalInfo = ''
 
         try{
             if (req.product_type == 1) { //Se for pizza
                 const {size} = req.body
-                response = await products.getSizeMultiplier(size)
-                req.multiplier = response[0].multiplier
+                if(['P', 'M', 'G', 'GG'].includes(size)){
+                    response = await products.getSizeMultiplier(size)
+                    req.multiplier = response[0].multiplier
+                    req.product_additionalInfo = size
+                }else{
+                    return res.status(406).json({message: "Invalid size option"})
+                }
+            }else if(req.product_type == 2){ //Se pizza dois sabores
+                const {flavor1} = req.body
+                const {flavor2} = req.body
+                req.flavor1 = flavor1
+                req.flavor2 = flavor2
             }
         }catch(err){
             return res.status(500).json({error: "Products - Internal error"})

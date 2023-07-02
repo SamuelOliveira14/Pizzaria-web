@@ -2,12 +2,13 @@ const connection = require('./connection')
 
 const order = {
     getCustomerOrders: async (customer_id) => {
-        const response = await connection.query(`SELECT * FROM "Orders" WHERE customer_id = $1`, [customer_id])
+        const response = await connection.query(`SELECT id, total_price, date FROM "Orders" WHERE customer_id = $1`, [customer_id])
         return response.rows
     },
 
     getDetailedOrder: async (id) => {
-        const response = await connection.query() // order join order items
+        const response = await connection.query(`SELECT order_id, customer_id, date, product_id, quantity, price
+        FROM public."Orders" join "Order_items" on id = order_id where id = $1;`,[id]) // order join order items
         return response.rows
     },
 
