@@ -47,7 +47,7 @@ const controller = {
       
       if(!user){
          res.clearCookie('token')
-         return res.status(404).json({error: 'User Not Found'})
+         return res.status(200).json({error: 'Wrong credentials'})
       }
       const userPassword = user.password
       if(password == userPassword){
@@ -55,7 +55,7 @@ const controller = {
          next()
       }else{
          res.clearCookie('token')
-         res.status(403).json({error: 'Wrong credentials'})
+         res.status(200).json({error: 'Wrong credentials'})
       }
    },
 
