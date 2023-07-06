@@ -195,3 +195,49 @@ TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public."Shopping_Cart"
     OWNER to postgres;
+
+-- Table: public.Orders
+
+-- DROP TABLE IF EXISTS public."Orders";
+
+CREATE TABLE IF NOT EXISTS public."Orders"
+(
+    id integer NOT NULL DEFAULT nextval('"Orders_id_seq"'::regclass),
+    customer_id integer NOT NULL,
+    total_price numeric(10,2) NOT NULL,
+    date date NOT NULL,
+    CONSTRAINT "Orders_pkey" PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."Orders"
+    OWNER to postgres;
+
+-- Table: public.Order_items
+
+-- DROP TABLE IF EXISTS public."Order_items";
+
+CREATE TABLE IF NOT EXISTS public."Order_items"
+(
+    order_id integer NOT NULL,
+    product_id integer NOT NULL,
+    quantity integer NOT NULL,
+    price numeric(10,2) NOT NULL,
+    CONSTRAINT "Order_items_pkey" PRIMARY KEY (order_id, product_id),
+    CONSTRAINT "orderItems_order_id" FOREIGN KEY (order_id)
+        REFERENCES public."Orders" (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+        NOT VALID,
+    CONSTRAINT "orderItems_product_id" FOREIGN KEY (product_id)
+        REFERENCES public."Products" (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+        NOT VALID
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."Order_items"
+    OWNER to postgres;
