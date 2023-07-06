@@ -73,32 +73,6 @@ const controller = {
 
         next()
     },
-
-    removeProduct: async (req, res, next) => {
-
-        const userId = req.userId //From authentication process
-        const product_price = req.product_price * req.multiplier //From products table
-        const product_type = req.product_type
-        const {product_id, quantity} = req.body
-
-        try {
-            var response = await shoppingCart.getQuantityAndPrice(userId, product_id)
-            if(response.length == 0){
-                return res.status(406).json({message: "This product is not in your cart!"})
-            }else{
-                const [item] = response
-                if(quantity == 0){
-                    await shoppingCart.removeProduct(userId, product_id)
-                }else{
-                    const removed_quantity = item.quantity - quantity
-                    const new_price = item.total_price - (product_price * removed_quantity) 
-                    await shoppingCart.updateQuantityAndPrice(userId, product_id,quantity,new_price)
-                }
-            }
-        }catch(err){
-            return res.status(500).json({error: "Shopping cart - Internal error "})
-        }
-    }
 }
 
 module.exports = controller

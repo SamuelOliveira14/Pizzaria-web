@@ -1,4 +1,3 @@
-const { response } = require('express')
 const connection = require('./connection')
 
 const shoppingCart = {
@@ -39,13 +38,6 @@ const shoppingCart = {
     clearCart: async (customer_id) => {
         const response = await connection.query(`DELETE FROM public."Shopping_Cart"
         WHERE customer_id = $1;`, [customer_id])
-
-        return response
-    },
-
-    removeProduct: async (customer_id, product_id) => {
-        const response = await connection.query(`DELETE FROM public."Shopping_Cart"
-        WHERE customer_id = $1 and product_id = $2;`, [customer_id, product_id])
 
         return response
     }
